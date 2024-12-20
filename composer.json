@@ -1,0 +1,20 @@
+{
+    "name": "hakuryo/openid-client",
+    "description": "Simple OpenId client with GuzzleHttp",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "hakuryo\\OpenidClient\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "DERE KEVIN",
+            "email": "kevin.dere@univ-reims.fr"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^7.9"
+    }
+}
