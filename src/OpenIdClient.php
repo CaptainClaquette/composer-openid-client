@@ -4,6 +4,7 @@ namespace hakuryo\OpenidClient;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use hakuryo\ConfigParser\ConfigParser;
 use hakuryo\OpenidClient\entities\AccessTokenResponse;
 use hakuryo\OpenidClient\entities\ProfileResponse;
 
@@ -87,13 +88,7 @@ class OpenIdClient
 
     public static function fromFile($path, $section = null): OpenIdClient
     {
-        if ($section != null) {
-            $rawConf = parse_ini_file($path, true)[$section];
-        } else {
-            $rawConf = parse_ini_file($path);
-        }
-        self::verifyConfig($rawConf);
-        $rawConf = json_decode(json_encode($rawConf));
+        $rawConf = ConfigParser::parse($path, $section, self::MANDATORY_KEY);
         $client = new OpenIdClient($rawConf->clientId, $rawConf->clientSecret, $rawConf->identityProviderUrl, $rawConf->redirectUri, $rawConf->scopes);
         $client->discoverEndpoints();
         return $client;
@@ -127,15 +122,5 @@ class OpenIdClient
             error_log($ce->getMessage());
         }
         return null;
-    }
-
-    private static function verifyConfig($data)
-    {
-        $confKeys = array_keys($data);
-        foreach (self::MANDATORY_KEY as $key) {
-            if (!(in_array($key, $confKeys))) {
-                throw new \Exception("$key is mandatory in config file");
-            }
-        }
     }
 }

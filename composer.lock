@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "60cee399143d7779e612abb01ea8c0c4",
+    "content-hash": "ffcc9b823b6e851387736945a3856f21",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -332,6 +332,46 @@
             "time": "2024-07-18T11:15:46+00:00"
         },
         {
+            "name": "hakuryo/config-parser",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CaptainClaquette/composer-config-parser.git",
+                "reference": "879fcd02f91b051d66a3e26e563d1a6d0c1183eb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CaptainClaquette/composer-config-parser/zipball/879fcd02f91b051d66a3e26e563d1a6d0c1183eb",
+                "reference": "879fcd02f91b051d66a3e26e563d1a6d0c1183eb",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^11.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "hakuryo\\ConfigParser\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "DERE KEVIN",
+                    "email": "kevin.dere@univ-reims.fr"
+                }
+            ],
+            "description": "JSON and INI parser for my other project",
+            "support": {
+                "issues": "https://github.com/CaptainClaquette/composer-config-parser/issues",
+                "source": "https://github.com/CaptainClaquette/composer-config-parser/tree/1.1.0"
+            },
+            "time": "2025-01-02T13:58:17+00:00"
+        },
+        {
             "name": "psr/http-client",
             "version": "1.0.3",
             "source": {
@@ -611,5 +651,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.6.0"
 }
