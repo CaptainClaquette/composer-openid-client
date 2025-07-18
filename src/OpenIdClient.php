@@ -4,12 +4,16 @@ namespace hakuryo\OpenidClient;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Psr7\Request;
 use hakuryo\ConfigParser\ConfigParser;
 use hakuryo\OpenidClient\entities\AccessTokenResponse;
 use hakuryo\OpenidClient\entities\ProfileResponse;
 
 class OpenIdClient
 {
+    public const MOD_BASIC = 1;
+    public const MOD_POST = 2;
     public string $clientId;
     public string $clientSecret;
     public string $redirectUri;
@@ -46,25 +50,35 @@ class OpenIdClient
         return $this->authorizeEndpoint . '?' . http_build_query($params);
     }
 
-    public function getAccessToken(string $code)
+    public function getAccessToken(string $code, int $mode = self::MOD_BASIC)
     {
-        $params = [
-            "client_id" => $this->clientId,
-            "client_secret" => $this->clientSecret,
+        $params = [];
+        $formParams = [
             'redirect_uri' => $this->redirectUri,
             "grant_type" => "authorization_code",
             "code" => $code,
+            "scope" => $this->scopes,
         ];
+        if ($mode === self::MOD_POST) {
+            $formParams['client_id'] = $this->clientId;
+            $formParams['client_secret'] = $this->clientSecret;
+        }
         $headers = [
-            'Content-Type' => 'application/x-www-form-urlencoded'
+            'Content-Type' => 'application/x-www-form-urlencoded',
         ];
+        if ($mode === self::MOD_BASIC) {
+            $params['auth'] = [$this->clientId, $this->clientSecret];
+        }
+        $params["form_params"] = $formParams;
+        $params["headers"] = $headers;
         try {
-            $token_response = $this->httpClient->post($this->accessTokenEndpoint, ["form_params" => $params, $headers]);
+            $request = new Request('POST', $this->accessTokenEndpoint, $params);
+            $token_response = $this->httpClient->send($request, $params);
             $body = json_decode($token_response->getBody()->getContents());
             if (property_exists($body, 'access_token')) {
                 return new AccessTokenResponse($body);
             }
-        } catch (ClientException $ce) {
+        } catch (\Exception $ce) {
             error_log($ce->getMessage());
         }
         return null;
